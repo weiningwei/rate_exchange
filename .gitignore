@@ -2,6 +2,7 @@ build/
 .vscode/
 bin/
 rate_change.pro.user
+res/*.json
 
 # Prerequisites
 *.d

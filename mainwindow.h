@@ -47,8 +47,6 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void request_finished(QNetworkReply *reply);
-
 private:
 
     bool read_json(const std::string &file_path, nlohmann::json &json_file);

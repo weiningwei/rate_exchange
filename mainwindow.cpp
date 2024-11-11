@@ -92,61 +92,66 @@ bool MainWindow::compute_rate()
 
 bool MainWindow::download_change_file()
 {
+    //qDebug()<<"QSslSocket="<< QSslSocket::sslLibraryBuildVersionString();
+    //qDebug() << "OpenSSL支持情况:" << QSslSocket::supportsSsl();
+    qDebug() << QSslSocket::sslLibraryBuildVersionString();
+    qDebug() << QSslSocket::supportsSsl();
+
     QString url_str = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/eur.json";
-    QUrl url(url_str);
+    QString baidu_str = "https://www.hao123.com/";
+
+//    QUrl url(url_str);
+    QUrl url(baidu_str);
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    qDebug() << manager->supportedSchemes();
 
     QNetworkRequest request;
     request.setUrl(url);
+
+    // 设置支持Https请求
+    QSslConfiguration config = QSslConfiguration::defaultConfiguration();
+    // 设置tls协议自动协商
+    config.setProtocol(QSsl::AnyProtocol);
+    // 设置不校验对端证书
+    config.setPeerVerifyMode(QSslSocket::VerifyNone);
+    request.setSslConfiguration(config);
+
     QNetworkReply *reply = manager->get(request);
 
-    QMetaObject::Connection connRet = QObject::connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(request_finished(QNetworkReply *)));
+    //检查状态码
+    int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    qDebug() << statusCode;
 
-    Q_ASSERT(connRet);
-
-    return true;
-}
-
-void MainWindow::request_finished(QNetworkReply *reply)
-{
-    // 获取http状态码
-    QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-    if (!statusCode.isValid())
-    {
-        qDebug() << "status code=" << statusCode.toInt();
-        return;
-    }
-
+/*
     QVariant reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
     if (!reason.isValid())
     {
         qDebug() << "reason=" << reason.toString();
-        return;
+        return false;
     }
 
     QNetworkReply::NetworkError err = reply->error();
-    if (err != QNetworkReply::NoError)
+    if (QNetworkReply::NoError != err)
     {
         qDebug() << "Failed: " << reply->errorString();
-        return;
+        return false;
     }
-    else
-    {
-        // 获取返回内容
-        // qDebug() << reply->readAll();
-        QByteArray data = reply->readAll();
-        QJsonDocument json_doc = QJsonDocument::fromJson(data);
+    // 获取返回内容
+    // qDebug() << reply->readAll();
+    QByteArray data = reply->readAll();
+    QJsonDocument json_doc = QJsonDocument::fromJson(data);
 
-        // 保存文件
-        QFile file(QApplication::applicationDirPath() + "test.json");
-        if (!file.open(QIODevice::WriteOnly))
-        {
-            qDebug() << "file open error";
-            return;
-        }
+    // 保存文件
+    QFile file(QApplication::applicationDirPath() + "test.json");
+    if (file.open(QIODevice::WriteOnly))
+    {
         file.write(json_doc.toJson(QJsonDocument::Indented));
         file.close();
+        return true;
     }
+*/
+    return true;
 }
 
 void MainWindow::on_spinBox_valueChanged(int arg1)
