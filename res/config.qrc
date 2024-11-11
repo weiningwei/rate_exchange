@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cent-name.json</file>
+        <file>cent-change.json</file>
+    </qresource>
+</RCC>

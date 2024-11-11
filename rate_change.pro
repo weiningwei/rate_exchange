@@ -30,6 +30,8 @@ CONFIG(release, release | debug ){
     DESTDIR += $$PWD/bin/debug
 }
 
+INCLUDEPATH += E:/package/json/include/
+
 SOURCES += \
     main.cpp \
     mainwindow.cpp
@@ -44,3 +46,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    res/config.qrc
