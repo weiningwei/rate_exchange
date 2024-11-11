@@ -157,19 +157,16 @@ bool MainWindow::download_change_file()
 void MainWindow::on_spinBox_valueChanged(int arg1)
 {
     compute_rate();
-    return;
 }
 
 void MainWindow::on_comboBox_in_activated(int index)
 {
     compute_rate();
-    return;
 }
 
 void MainWindow::on_comboBox_out_activated(int index)
 {
     compute_rate();
-    return;
 }
 
 void MainWindow::on_comboBox_out_currentIndexChanged(int index)
